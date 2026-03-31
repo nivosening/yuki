@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuki 集點卡 - 幼兒友善版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Arial", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #fffbf0 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .page-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #ffb3d9 0%, #ffc9e3 100%);
+            border-radius: 25px;
+            color: #6b2d5c;
+            box-shadow: 0 8px 25px rgba(255, 179, 217, 0.3);
+        }
+
+        .title {
+            font-size: 52px;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .admin-link {
+            padding: 15px 30px;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            color: #6b2d5c;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .admin-link:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(255, 179, 217, 0.2);
+        }
+
+        /* 粉紅色系 */
+        .card-points {
+            background: linear-gradient(135deg, #ffc9e3 0%, #ffb3d9 100%);
+            color: #6b2d5c;
+            grid-column: span 2;
+        }
+
+        .card-input {
+            background: linear-gradient(135deg, #ffe3f0 0%, #ffd4e7 100%);
+            color: #6b2d5c;
+        }
+
+        .card-rewards {
+            background: linear-gradient(135deg, #fff0f6 0%, #ffe8f2 100%);
+            color: #6b2d5c;
+        }
+
+        .card-history {
+            background: linear-gradient(135deg, #fff0f6 0%, #ffe8f2 100%);
+            color: #6b2d5c;
+        }
+
+        .card-redeemed {
+            background: linear-gradient(135deg, #ffe3f0 0%, #ffd4e7 100%);
+            color: #6b2d5c;
+        }
+
+        .card-stats {
+            background: linear-gradient(135deg, #ffb3d9 0%, #ffc9e3 100%);
+            color: #6b2d5c;
+        }
+
+        @media (max-width: 1024px) {
+            .card-points {
+                grid-column: auto;
+            }
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
+        }
+
+        .points-display {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border: 4px dashed rgba(255, 255, 255, 0.5);
+        }
+
+        .points-label {
+            font-size: 32px;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .points-number {
+            font-size: 100px;
+            font-weight: bold;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 1);
+            background: white;
+            box-shadow: 0 0 10px rgba(255, 179, 217, 0.4);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 1.5rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #6b2d5c;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.3);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.3);
+            border-left: 6px solid #ffb3d9;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            font-size: 18px;
+        }
+
+        .history-item.negative {
+            border-left-color: #ff9cc6;
+        }
+
+        .history-points {
+            font-weight: bold;
+            font-size: 28px;
+            margin-bottom: 0.5rem;
+        }
+
+        .history-points.positive {
+            color: #d73d8c;
+        }
+
+        .history-points.negative {
+            color: #e85fa1;
+        }
+
+        .history-reason {
+            font-size: 18px;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        .history-meta {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .reward-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 4px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reward-card:hover {
+            transform: scale(1.08);
+            background: rgba(255, 255, 255, 0.7);
+            border-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 6px 20px rgba(255, 179, 217, 0.3);
+        }
+
+        .reward-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .reward-emoji-fallback {
+            width: 100%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            border-radius: 12px;
+            margin-bottom: 0.8rem;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .reward-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+        }
+
+        .reward-cost {
+            font-size: 16px;
+            margin-bottom: 0.8rem;
+            font-weight: bold;
+        }
+
+        .reward-button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            color: inherit;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .reward-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        .reward-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .scroll-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 12px;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            font-size: 20px;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: rgba(255, 255, 255, 0.4);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            color: #d73d8c;
+        }
+
+        .error-message {
+            background: rgba(255, 192, 203, 0.3);
+            border: 3px solid rgba(255, 179, 217, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            color: #d73d8c;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 3px dashed rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-label {
+            font-size: 18px;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            opacity: 0.95;
+        }
+
+        .stat-value {
+            font-size: 42px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .redeemed-item {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 18px;
+        }
+
+        .redeemed-emoji {
+            font-size: 40px;
+        }
+
+        .redeemed-info {
+            flex: 1;
+        }
+
+        .redeemed-name {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 0.25rem;
+        }
+
+        .redeemed-date {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .stats-detail {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px dashed rgba(255, 255, 255, 0.4);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .stats-detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.75rem 0;
+        }
+
+        .stats-detail-label {
+            font-weight: bold;
+        }
+
+        .stats-detail-value {
+            font-size: 22px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="header">
+            <h1 class="title">🎯 Yuki 集點卡</h1>
+            <a href="yuki_admin.html" class="admin-link">⚙️ 管理後台</a>
+        </div>
+
+        <div class="main-grid">
+            <!-- 大點數顯示 -->
+            <div class="card card-points">
+                <div class="points-display">
+                    <div class="points-label">🌟 目前點數 🌟</div>
+                    <div class="points-number" id="totalPoints">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- 左邊：點數管理 -->
+            <div class="card card-input">
+                <h3 class="section-title">➕ 新增/扣減點數</h3>
+                
+                <div id="message"></div>
+
+                <div class="form-group">
+                    <label class="form-label">點數 (+/-)：</label>
+                    <input type="number" id="pointsInput" placeholder="輸入正數(加點)或負數(扣點)" value="0">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">原因：</label>
+                    <select id="reasonSelect" onchange="handleReasonChange()">
+                        <option value="">--請選擇--</option>
+                    </select>
+                </div>
+
+                <div class="form-group hidden-field" id="reasonOtherGroup" style="display: none;">
+                    <label class="form-label">其他原因備註：</label>
+                    <input type="text" id="reasonOtherInput" placeholder="請輸入加/扣點原因備註">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">加減點數的人：</label>
+                    <select id="evaluatorInput" onchange="handleEvaluatorChange()">
+                        <option value="">--請選擇--</option>
+                        <option value="爸爸">爸爸</option>
+                        <option value="媽媽">媽媽</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+
+                <div class="form-group hidden-field" id="evaluatorOtherGroup" style="display: none;">
+                    <label class="form-label">其他人備註：</label>
+                    <input type="text" id="evaluatorOtherInput" placeholder="請輸入加減點數的人">
+                </div>
+
+                <div class="button-group">
+                    <button onclick="addPoints()">✓ 確認</button>
+                    <button onclick="clearForm()">清除</button>
+                </div>
+
+                <div class="stats-grid" id="topStatsContainer">
+                </div>
+            </div>
+
+            <!-- 右邊：獎品兌換 -->
+            <div class="card card-rewards">
+                <h3 class="section-title">🎁 獎品兌換</h3>
+                <div class="rewards-grid" id="rewardsList">
+                    <div class="empty-message" style="grid-column: 1/-1;">載入中...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 歷史和已兌換 -->
+        <div class="main-grid">
+            <div class="card card-history">
+                <h3 class="section-title">📊 加減點記錄</h3>
+                <div class="scroll-container" id="historyList">
+                    <div class="empty-message">還沒有記錄</div>
+                </div>
+            </div>
+
+            <div class="card card-redeemed">
+                <h3 class="section-title">🏆 已兌換獎品</h3>
+                <div class="scroll-container" id="redeemList">
+                    <div class="empty-message">還沒有兌換過獎品</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 統計分析 -->
+        <div class="card card-stats">
+            <h3 class="section-title">📈 統計資訊</h3>
+            <div id="statsContent">
+                <div class="empty-message">載入中...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化
+        let totalPoints = 0;
+        let history = [];
+        let redeemHistory = [];
+        let rewards = [];
+        let settings = {
+            reasonOptions: ['完成家務', '守規矩', '主動練習', '亂發脾氣', '沒有收拾'],
+            evaluatorOptions: ['爸爸', '媽媽', '其他']
+        };
+
+        // 從 localStorage 加載數據
+        function loadData() {
+            const saved = localStorage.getItem('yukiPoints');
+            if (saved) {
+                const data = JSON.parse(saved);
+                totalPoints = data.points || 0;
+                history = data.history || [];
+                redeemHistory = data.redeemed || [];
+            }
+            loadSettings();
+            loadRewards();
+        }
+
+        function loadSettings() {
+            const saved = localStorage.getItem('yukiSettings');
+            if (saved) {
+                const data = JSON.parse(saved);
+                settings.reasonOptions = Array.isArray(data.reasonOptions) && data.reasonOptions.length > 0
+                    ? data.reasonOptions
+                    : settings.reasonOptions;
+            }
+            renderReasonOptions();
+        }
+
+        function renderReasonOptions() {
+            const select = document.getElementById('reasonSelect');
+            const options = settings.reasonOptions.map(reason => `<option value="${reason}">${reason}</option>`).join('');
+            select.innerHTML = `
+                <option value="">--請選擇--</option>
+                ${options}
+                <option value="其他">其他</option>
+            `;
+        }
+
+        function handleReasonChange() {
+            const isOther = document.getElementById('reasonSelect').value === '其他';
+            document.getElementById('reasonOtherGroup').style.display = isOther ? 'block' : 'none';
+            if (!isOther) {
+                document.getElementById('reasonOtherInput').value = '';
+            }
+        }
+
+        function handleEvaluatorChange() {
+            const isOther = document.getElementById('evaluatorInput').value === '其他';
+            document.getElementById('evaluatorOtherGroup').style.display = isOther ? 'block' : 'none';
+            if (!isOther) {
+                document.getElementById('evaluatorOtherInput').value = '';
+            }
+        }
+
+        // 加載獎品
+        function loadRewards() {
+            const saved = localStorage.getItem('yukiRewards');
+            if (saved) {
+                rewards = JSON.parse(saved);
+            } else {
+                rewards = [
+                    { id: 1, name: '小玩具', cost: 10, emoji: '🎁' },
+                    { id: 2, name: '冰淇淋', cost: 15, emoji: '🍦' },
+                    { id: 3, name: '漫畫書', cost: 20, emoji: '📚' },
+                    { id: 4, name: '去公園', cost: 25, emoji: '🎡' },
+                    { id: 5, name: '看電影', cost: 30, emoji: '🎬' },
+                    { id: 6, name: 'Switch 遊戲', cost: 50, emoji: '🎮' },
+                    { id: 7, name: '去餐廳吃飯', cost: 40, emoji: '🍕' },
+                    { id: 8, name: '新衣服', cost: 60, emoji: '👕' },
+                ];
+            }
+            updateDisplay();
+        }
+
+        // 保存數據
+        function saveData() {
+            localStorage.setItem('yukiPoints', JSON.stringify({
+                points: totalPoints,
+                history: history,
+                redeemed: redeemHistory
+            }));
+        }
+
+        // 新增點數
+        function addPoints() {
+            const points = parseInt(document.getElementById('pointsInput').value);
+            const reasonSelect = document.getElementById('reasonSelect').value;
+            const reasonOther = document.getElementById('reasonOtherInput').value.trim();
+            const evaluatorSelect = document.getElementById('evaluatorInput').value;
+            const evaluatorOther = document.getElementById('evaluatorOtherInput').value.trim();
+
+            const reason = reasonSelect === '其他' ? reasonOther : reasonSelect;
+            const evaluator = evaluatorSelect === '其他' ? evaluatorOther : evaluatorSelect;
+
+            if (isNaN(points)) {
+                showMessage('請輸入有效的數字', 'error');
+                return;
+            }
+            if (!reasonSelect) {
+                showMessage('請選擇原因', 'error');
+                return;
+            }
+            if (reasonSelect === '其他' && !reasonOther) {
+                showMessage('請輸入其他原因備註', 'error');
+                return;
+            }
+            if (!evaluatorSelect) {
+                showMessage('請選擇加減點數的人', 'error');
+                return;
+            }
+            if (evaluatorSelect === '其他' && !evaluatorOther) {
+                showMessage('請輸入其他人備註', 'error');
+                return;
+            }
+
+            totalPoints += points;
+            history.unshift({
+                points: points,
+                reason: reason,
+                reasonCategory: reasonSelect,
+                evaluator: evaluator,
+                evaluatorCategory: evaluatorSelect,
+                date: new Date().toLocaleString('zh-Hant-TW')
+            });
+
+            if (history.length > 50) history.pop();
+
+            saveData();
+            updateDisplay();
+            clearForm();
+            showMessage(`成功！已${points > 0 ? '加' : '扣'}${Math.abs(points)}點`, 'success');
+        }
+
+        // 顯示消息
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            const className = type === 'success' ? 'success-message' : 'error-message';
+            messageEl.innerHTML = `<div class="${className}">${text}</div>`;
+            setTimeout(() => {
+                messageEl.innerHTML = '';
+            }, 3000);
+        }
+
+        // 清除表單
+        function clearForm() {
+            document.getElementById('pointsInput').value = '0';
+            document.getElementById('reasonSelect').value = '';
+            document.getElementById('reasonOtherInput').value = '';
+            document.getElementById('evaluatorInput').value = '';
+            document.getElementById('evaluatorOtherInput').value = '';
+            handleReasonChange();
+            handleEvaluatorChange();
+        }
+
+        // 兌換獎品
+        function redeemReward(rewardId) {
+            const reward = rewards.find(r => r.id === rewardId);
+            if (totalPoints < reward.cost) {
+                showMessage(`點數不足！還差 ${reward.cost - totalPoints} 點`, 'error');
+                return;
+            }
+
+            totalPoints -= reward.cost;
+            redeemHistory.unshift({
+                id: reward.id,
+                name: reward.name,
+                emoji: reward.emoji,
+                cost: reward.cost,
+                date: new Date().toLocaleString('zh-Hant-TW')
+            });
+
+            saveData();
+            updateDisplay();
+            showMessage(`恭喜！已兌換「${reward.name}」`, 'success');
+        }
+
+        // 計算統計資訊
+        function calculateStats() {
+            // 最常加分的項目
+            const reasonCount = {};
+            history.forEach(item => {
+                if (item.points > 0) {
+                    reasonCount[item.reason] = (reasonCount[item.reason] || 0) + 1;
+                }
+            });
+            const topReason = Object.entries(reasonCount).sort((a, b) => b[1] - a[1])[0];
+
+            // 最常扣分的項目
+            const badReasonCount = {};
+            history.forEach(item => {
+                if (item.points < 0) {
+                    badReasonCount[item.reason] = (badReasonCount[item.reason] || 0) + 1;
+                }
+            });
+            const topBadReason = Object.entries(badReasonCount).sort((a, b) => b[1] - a[1])[0];
+
+            // 已兌換的獎品統計
+            const redeemCount = redeemHistory.length;
+            const totalSpent = redeemHistory.reduce((sum, item) => sum + item.cost, 0);
+
+            return {
+                topReason: topReason ? topReason[0] : '---',
+                topReasonCount: topReason ? topReason[1] : 0,
+                topBadReason: topBadReason ? topBadReason[0] : '---',
+                topBadReasonCount: topBadReason ? topBadReason[1] : 0,
+                redeemCount: redeemCount,
+                totalSpent: totalSpent
+            };
+        }
+
+        // 更新顯示
+        function updateDisplay() {
+            document.getElementById('totalPoints').textContent = totalPoints;
+
+            // 更新獎品列表
+            const rewardsList = document.getElementById('rewardsList');
+            if (rewards.length === 0) {
+                rewardsList.innerHTML = '<div class="empty-message" style="grid-column: 1/-1;">還沒有可用的獎品</div>';
+            } else {
+                rewardsList.innerHTML = rewards.map(reward => `
+                    <div class="reward-card">
+                        ${reward.image ? 
+                            `<img src="${reward.image}" class="reward-image" alt="${reward.name}">` :
+                            `<div class="reward-emoji-fallback">${reward.emoji}</div>`
+                        }
+                        <div class="reward-name">${reward.name}</div>
+                        <div class="reward-cost">${reward.cost} 點</div>
+                        ${reward.link ? `<div style="font-size: 11px; margin: 0.5rem 0;"><a href="${reward.link}" target="_blank" style="color: #d73d8c;">🔗 詳情</a></div>` : ''}
+                        <button class="reward-button" onclick="redeemReward(${reward.id})" ${totalPoints < reward.cost ? 'disabled' : ''}>
+                            兌換
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            // 更新歷史記錄
+            const historyList = document.getElementById('historyList');
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="empty-message">還沒有記錄</div>';
+            } else {
+                historyList.innerHTML = history.slice(0, 15).map(item => `
+                    <div class="history-item ${item.points < 0 ? 'negative' : ''}">
+                        <div class="history-points ${item.points > 0 ? 'positive' : 'negative'}">
+                            ${item.points > 0 ? '➕' : '➖'} ${Math.abs(item.points)} 點
+                        </div>
+                        <div class="history-reason">${item.reason}</div>
+                        <div class="history-meta">👤 ${item.evaluator} | ${item.date}</div>
+                    </div>
+                `).join('');
+            }
+
+            // 更新已兌換獎品
+            const redeemList = document.getElementById('redeemList');
+            if (redeemHistory.length === 0) {
+                redeemList.innerHTML = '<div class="empty-message">還沒有兌換過獎品</div>';
+            } else {
+                redeemList.innerHTML = redeemHistory.slice(0, 15).map(item => `
+                    <div class="redeemed-item">
+                        <div class="redeemed-emoji">${item.emoji}</div>
+                        <div class="redeemed-info">
+                            <div class="redeemed-name">${item.name}</div>
+                            <div class="redeemed-date">用了 ${item.cost} 點 | ${item.date}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // 更新統計資訊
+            const stats = calculateStats();
+            const statsContent = document.getElementById('statsContent');
+            statsContent.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">📝 加分次數</div>
+                        <div class="stat-value">${history.filter(h => h.points > 0).length}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">⚠️ 扣分次數</div>
+                        <div class="stat-value">${history.filter(h => h.points < 0).length}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">🏆 已兌換獎品</div>
+                        <div class="stat-value">${stats.redeemCount}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">💰 花費點數</div>
+                        <div class="stat-value">${stats.totalSpent}</div>
+                    </div>
+                </div>
+                <div class="stats-detail">
+                    <div class="stats-detail-item">
+                        <span class="stats-detail-label">🌟 最常加分原因：</span>
+                        <span class="stats-detail-value">${stats.topReason}</span>
+                    </div>
+                    <div class="stats-detail-item" style="font-size: 14px; opacity: 0.8;">
+                        (出現 ${stats.topReasonCount} 次)
+                    </div>
+                    <div class="stats-detail-item">
+                        <span class="stats-detail-label">❌ 最常扣分原因：</span>
+                        <span class="stats-detail-value">${stats.topBadReason}</span>
+                    </div>
+                    <div class="stats-detail-item" style="font-size: 14px; opacity: 0.8;">
+                        (出現 ${stats.topBadReasonCount} 次)
+                    </div>
+                </div>
+            `;
+
+            // 更新頂部統計
+            const topStatsContainer = document.getElementById('topStatsContainer');
+            topStatsContainer.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-label">加分次數</div>
+                    <div class="stat-value">${history.filter(h => h.points > 0).length}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">扣分次數</div>
+                    <div class="stat-value">${history.filter(h => h.points < 0).length}</div>
+                </div>
+            `;
+        }
+
+        // 初始化頁面
+        loadData();
+    </script>
+</body>
+</html>
