@@ -80,7 +80,6 @@
             box-shadow: 0 8px 25px rgba(255, 179, 217, 0.2);
         }
 
-        /* 粉紅色系 */
         .card-points {
             background: linear-gradient(135deg, #ffc9e3 0%, #ffb3d9 100%);
             color: #6b2d5c;
@@ -180,7 +179,7 @@
 
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 60px;
         }
 
         .button-group {
@@ -453,17 +452,20 @@
             font-size: 22px;
             font-weight: bold;
         }
+
+        .hidden-input {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="page-container">
         <div class="header">
             <h1 class="title">🎯 Yuki 集點卡</h1>
-            <a href="https://nivosening.github.io/yuki/yuki_admin.html" class="admin-link">⚙️ 管理後台</a>
+            <a href="yuki_admin.html" class="admin-link">⚙️ 管理後台</a>
         </div>
 
         <div class="main-grid">
-            <!-- 大點數顯示 -->
             <div class="card card-points">
                 <div class="points-display">
                     <div class="points-label">🌟 目前點數 🌟</div>
@@ -473,7 +475,6 @@
         </div>
 
         <div class="main-grid">
-            <!-- 左邊：點數管理 -->
             <div class="card card-input">
                 <h3 class="section-title">➕ 新增/扣減點數</h3>
                 
@@ -486,29 +487,34 @@
 
                 <div class="form-group">
                     <label class="form-label">原因：</label>
-                    <select id="reasonSelect" onchange="handleReasonChange()">
+                    <select id="reasonSelect">
                         <option value="">--請選擇--</option>
                     </select>
                 </div>
 
-                <div class="form-group hidden-field" id="reasonOtherGroup" style="display: none;">
-                    <label class="form-label">其他原因備註：</label>
-                    <input type="text" id="reasonOtherInput" placeholder="請輸入加/扣點原因備註">
+                <div class="form-group hidden-input" id="otherReasonGroup">
+                    <label class="form-label">其他原因：</label>
+                    <input type="text" id="otherReasonInput" placeholder="請輸入原因">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">加減點數的人：</label>
-                    <select id="evaluatorInput" onchange="handleEvaluatorChange()">
+                    <label class="form-label">備注 (可選)：</label>
+                    <textarea id="noteInput" placeholder="補充說明，例如：Yuki 主動幫忙打掃房間"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">加減點的人：</label>
+                    <select id="evaluatorInput">
                         <option value="">--請選擇--</option>
-                        <option value="爸爸">爸爸</option>
-                        <option value="媽媽">媽媽</option>
+                        <option value="爸爸">👨 爸爸</option>
+                        <option value="媽媽">👩 媽媽</option>
                         <option value="其他">其他</option>
                     </select>
                 </div>
 
-                <div class="form-group hidden-field" id="evaluatorOtherGroup" style="display: none;">
-                    <label class="form-label">其他人備註：</label>
-                    <input type="text" id="evaluatorOtherInput" placeholder="請輸入加減點數的人">
+                <div class="form-group hidden-input" id="otherEvaluatorGroup">
+                    <label class="form-label">其他人名稱：</label>
+                    <input type="text" id="otherEvaluatorInput" placeholder="請輸入名稱">
                 </div>
 
                 <div class="button-group">
@@ -520,7 +526,6 @@
                 </div>
             </div>
 
-            <!-- 右邊：獎品兌換 -->
             <div class="card card-rewards">
                 <h3 class="section-title">🎁 獎品兌換</h3>
                 <div class="rewards-grid" id="rewardsList">
@@ -529,7 +534,6 @@
             </div>
         </div>
 
-        <!-- 歷史和已兌換 -->
         <div class="main-grid">
             <div class="card card-history">
                 <h3 class="section-title">📊 加減點記錄</h3>
@@ -546,7 +550,6 @@
             </div>
         </div>
 
-        <!-- 統計分析 -->
         <div class="card card-stats">
             <h3 class="section-title">📈 統計資訊</h3>
             <div id="statsContent">
@@ -556,17 +559,12 @@
     </div>
 
     <script>
-        // 初始化
         let totalPoints = 0;
         let history = [];
         let redeemHistory = [];
         let rewards = [];
-        let settings = {
-            reasonOptions: ['完成家務', '守規矩', '主動練習', '亂發脾氣', '沒有收拾'],
-            evaluatorOptions: ['爸爸', '媽媽', '其他']
-        };
+        let reasons = [];
 
-        // 從 localStorage 加載數據
         function loadData() {
             const saved = localStorage.getItem('yukiPoints');
             if (saved) {
@@ -575,48 +573,10 @@
                 history = data.history || [];
                 redeemHistory = data.redeemed || [];
             }
-            loadSettings();
             loadRewards();
+            loadReasons();
         }
 
-        function loadSettings() {
-            const saved = localStorage.getItem('yukiSettings');
-            if (saved) {
-                const data = JSON.parse(saved);
-                settings.reasonOptions = Array.isArray(data.reasonOptions) && data.reasonOptions.length > 0
-                    ? data.reasonOptions
-                    : settings.reasonOptions;
-            }
-            renderReasonOptions();
-        }
-
-        function renderReasonOptions() {
-            const select = document.getElementById('reasonSelect');
-            const options = settings.reasonOptions.map(reason => `<option value="${reason}">${reason}</option>`).join('');
-            select.innerHTML = `
-                <option value="">--請選擇--</option>
-                ${options}
-                <option value="其他">其他</option>
-            `;
-        }
-
-        function handleReasonChange() {
-            const isOther = document.getElementById('reasonSelect').value === '其他';
-            document.getElementById('reasonOtherGroup').style.display = isOther ? 'block' : 'none';
-            if (!isOther) {
-                document.getElementById('reasonOtherInput').value = '';
-            }
-        }
-
-        function handleEvaluatorChange() {
-            const isOther = document.getElementById('evaluatorInput').value === '其他';
-            document.getElementById('evaluatorOtherGroup').style.display = isOther ? 'block' : 'none';
-            if (!isOther) {
-                document.getElementById('evaluatorOtherInput').value = '';
-            }
-        }
-
-        // 加載獎品
         function loadRewards() {
             const saved = localStorage.getItem('yukiRewards');
             if (saved) {
@@ -636,7 +596,32 @@
             updateDisplay();
         }
 
-        // 保存數據
+        function loadReasons() {
+            const saved = localStorage.getItem('yukiReasons');
+            if (saved) {
+                reasons = JSON.parse(saved);
+            } else {
+                reasons = [
+                    { id: 1, name: '完成家務', type: 'positive' },
+                    { id: 2, name: '守紀律', type: 'positive' },
+                    { id: 3, name: '幫助他人', type: 'positive' },
+                    { id: 4, name: '不聽話', type: 'negative' },
+                    { id: 5, name: '說謊', type: 'negative' },
+                ];
+            }
+            updateReasonSelect();
+            updateDisplay();
+        }
+
+        function updateReasonSelect() {
+            const select = document.getElementById('reasonSelect');
+            select.innerHTML = '<option value="">--請選擇--</option>';
+            reasons.forEach(reason => {
+                select.innerHTML += `<option value="${reason.id}">${reason.name}</option>`;
+            });
+            select.innerHTML += '<option value="other">其他</option>';
+        }
+
         function saveData() {
             localStorage.setItem('yukiPoints', JSON.stringify({
                 points: totalPoints,
@@ -645,45 +630,54 @@
             }));
         }
 
-        // 新增點數
         function addPoints() {
             const points = parseInt(document.getElementById('pointsInput').value);
             const reasonSelect = document.getElementById('reasonSelect').value;
-            const reasonOther = document.getElementById('reasonOtherInput').value.trim();
-            const evaluatorSelect = document.getElementById('evaluatorInput').value;
-            const evaluatorOther = document.getElementById('evaluatorOtherInput').value.trim();
-
-            const reason = reasonSelect === '其他' ? reasonOther : reasonSelect;
-            const evaluator = evaluatorSelect === '其他' ? evaluatorOther : evaluatorSelect;
+            const note = document.getElementById('noteInput').value.trim();
+            const evaluator = document.getElementById('evaluatorInput').value;
+            let reason = '';
 
             if (isNaN(points)) {
                 showMessage('請輸入有效的數字', 'error');
                 return;
             }
+
             if (!reasonSelect) {
                 showMessage('請選擇原因', 'error');
                 return;
             }
-            if (reasonSelect === '其他' && !reasonOther) {
-                showMessage('請輸入其他原因備註', 'error');
+
+            if (reasonSelect === 'other') {
+                reason = document.getElementById('otherReasonInput').value.trim();
+                if (!reason) {
+                    showMessage('請輸入其他原因', 'error');
+                    return;
+                }
+            } else {
+                const selectedReason = reasons.find(r => r.id === parseInt(reasonSelect));
+                reason = selectedReason ? selectedReason.name : '';
+            }
+
+            if (!evaluator) {
+                showMessage('請選擇加減點的人', 'error');
                 return;
             }
-            if (!evaluatorSelect) {
-                showMessage('請選擇加減點數的人', 'error');
-                return;
-            }
-            if (evaluatorSelect === '其他' && !evaluatorOther) {
-                showMessage('請輸入其他人備註', 'error');
-                return;
+
+            let finalEvaluator = evaluator;
+            if (evaluator === '其他') {
+                finalEvaluator = document.getElementById('otherEvaluatorInput').value.trim();
+                if (!finalEvaluator) {
+                    showMessage('請輸入其他人的名稱', 'error');
+                    return;
+                }
             }
 
             totalPoints += points;
             history.unshift({
                 points: points,
                 reason: reason,
-                reasonCategory: reasonSelect,
-                evaluator: evaluator,
-                evaluatorCategory: evaluatorSelect,
+                note: note || null,
+                evaluator: finalEvaluator,
                 date: new Date().toLocaleString('zh-Hant-TW')
             });
 
@@ -695,7 +689,6 @@
             showMessage(`成功！已${points > 0 ? '加' : '扣'}${Math.abs(points)}點`, 'success');
         }
 
-        // 顯示消息
         function showMessage(text, type) {
             const messageEl = document.getElementById('message');
             const className = type === 'success' ? 'success-message' : 'error-message';
@@ -705,18 +698,17 @@
             }, 3000);
         }
 
-        // 清除表單
         function clearForm() {
             document.getElementById('pointsInput').value = '0';
             document.getElementById('reasonSelect').value = '';
-            document.getElementById('reasonOtherInput').value = '';
+            document.getElementById('otherReasonInput').value = '';
+            document.getElementById('noteInput').value = '';
             document.getElementById('evaluatorInput').value = '';
-            document.getElementById('evaluatorOtherInput').value = '';
-            handleReasonChange();
-            handleEvaluatorChange();
+            document.getElementById('otherEvaluatorInput').value = '';
+            document.getElementById('otherReasonGroup').classList.add('hidden-input');
+            document.getElementById('otherEvaluatorGroup').classList.add('hidden-input');
         }
 
-        // 兌換獎品
         function redeemReward(rewardId) {
             const reward = rewards.find(r => r.id === rewardId);
             if (totalPoints < reward.cost) {
@@ -738,9 +730,7 @@
             showMessage(`恭喜！已兌換「${reward.name}」`, 'success');
         }
 
-        // 計算統計資訊
         function calculateStats() {
-            // 最常加分的項目
             const reasonCount = {};
             history.forEach(item => {
                 if (item.points > 0) {
@@ -749,7 +739,6 @@
             });
             const topReason = Object.entries(reasonCount).sort((a, b) => b[1] - a[1])[0];
 
-            // 最常扣分的項目
             const badReasonCount = {};
             history.forEach(item => {
                 if (item.points < 0) {
@@ -758,7 +747,6 @@
             });
             const topBadReason = Object.entries(badReasonCount).sort((a, b) => b[1] - a[1])[0];
 
-            // 已兌換的獎品統計
             const redeemCount = redeemHistory.length;
             const totalSpent = redeemHistory.reduce((sum, item) => sum + item.cost, 0);
 
@@ -772,11 +760,9 @@
             };
         }
 
-        // 更新顯示
         function updateDisplay() {
             document.getElementById('totalPoints').textContent = totalPoints;
 
-            // 更新獎品列表
             const rewardsList = document.getElementById('rewardsList');
             if (rewards.length === 0) {
                 rewardsList.innerHTML = '<div class="empty-message" style="grid-column: 1/-1;">還沒有可用的獎品</div>';
@@ -797,7 +783,6 @@
                 `).join('');
             }
 
-            // 更新歷史記錄
             const historyList = document.getElementById('historyList');
             if (history.length === 0) {
                 historyList.innerHTML = '<div class="empty-message">還沒有記錄</div>';
@@ -808,12 +793,12 @@
                             ${item.points > 0 ? '➕' : '➖'} ${Math.abs(item.points)} 點
                         </div>
                         <div class="history-reason">${item.reason}</div>
+                        ${item.note ? `<div class="history-meta">備注：${item.note}</div>` : ''}
                         <div class="history-meta">👤 ${item.evaluator} | ${item.date}</div>
                     </div>
                 `).join('');
             }
 
-            // 更新已兌換獎品
             const redeemList = document.getElementById('redeemList');
             if (redeemHistory.length === 0) {
                 redeemList.innerHTML = '<div class="empty-message">還沒有兌換過獎品</div>';
@@ -829,7 +814,6 @@
                 `).join('');
             }
 
-            // 更新統計資訊
             const stats = calculateStats();
             const statsContent = document.getElementById('statsContent');
             statsContent.innerHTML = `
@@ -869,7 +853,6 @@
                 </div>
             `;
 
-            // 更新頂部統計
             const topStatsContainer = document.getElementById('topStatsContainer');
             topStatsContainer.innerHTML = `
                 <div class="stat-item">
@@ -883,8 +866,28 @@
             `;
         }
 
-        // 初始化頁面
-        loadData();
+        // 監聽原因選擇
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('reasonSelect')?.addEventListener('change', function() {
+                const otherGroup = document.getElementById('otherReasonGroup');
+                if (this.value === 'other') {
+                    otherGroup.classList.remove('hidden-input');
+                } else {
+                    otherGroup.classList.add('hidden-input');
+                }
+            });
+
+            document.getElementById('evaluatorInput')?.addEventListener('change', function() {
+                const otherGroup = document.getElementById('otherEvaluatorGroup');
+                if (this.value === '其他') {
+                    otherGroup.classList.remove('hidden-input');
+                } else {
+                    otherGroup.classList.add('hidden-input');
+                }
+            });
+
+            loadData();
+        });
     </script>
 </body>
 </html>
