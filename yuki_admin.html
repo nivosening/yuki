@@ -11,55 +11,14 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --color-background-primary: #ffffff;
-            --color-background-secondary: #f5f5f5;
-            --color-background-tertiary: #e8e8e8;
-            --color-background-info: #e6f1fb;
-            --color-background-success: #eaf3de;
-            --color-background-danger: #fcebeb;
-            --color-text-primary: #2c2c2a;
-            --color-text-secondary: #888780;
-            --color-text-tertiary: #b4b2a9;
-            --color-text-info: #185fa5;
-            --color-text-success: #3b6d11;
-            --color-text-danger: #a32d2d;
-            --color-border-tertiary: rgba(180, 178, 169, 0.15);
-            --color-border-secondary: rgba(180, 178, 169, 0.3);
-            --color-border-primary: rgba(180, 178, 169, 0.4);
-            --color-border-info: #185fa5;
-            --color-border-success: #3b6d11;
-            --color-border-danger: #a32d2d;
-            --border-radius-md: 8px;
-            --border-radius-lg: 12px;
-            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --color-background-primary: #1a1a1a;
-                --color-background-secondary: #2d2d2d;
-                --color-background-tertiary: #3a3a3a;
-                --color-background-info: #042c53;
-                --color-background-success: #173404;
-                --color-background-danger: #501313;
-                --color-text-primary: #f5f5f5;
-                --color-text-secondary: #a0a09f;
-                --color-text-tertiary: #7a7a79;
-                --color-text-info: #b5d4f4;
-                --color-text-success: #c0dd97;
-                --color-text-danger: #f7c1c1;
-            }
-        }
-
         body {
-            font-family: var(--font-sans);
-            background: var(--color-background-tertiary);
-            color: var(--color-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #2c2c2a;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -78,9 +37,9 @@
         }
 
         .login-card {
-            background: var(--color-background-primary);
-            border: 0.5px solid var(--color-border-tertiary);
-            border-radius: var(--border-radius-lg);
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
             padding: 3rem;
             width: 100%;
             max-width: 400px;
@@ -96,7 +55,7 @@
 
         .login-subtitle {
             font-size: 14px;
-            color: var(--color-text-secondary);
+            color: #888780;
             text-align: center;
             margin-bottom: 2rem;
         }
@@ -110,10 +69,10 @@
 
         .btn-parent {
             padding: 16px;
-            border: 0.5px solid var(--color-border-secondary);
-            border-radius: var(--border-radius-md);
-            background: transparent;
-            color: var(--color-text-primary);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            color: #2c2c2a;
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
@@ -121,12 +80,8 @@
         }
 
         .btn-parent:hover {
-            background: var(--color-background-secondary);
-            border-color: var(--color-border-primary);
-        }
-
-        .btn-parent:active {
-            transform: scale(0.98);
+            background: #f5f5f5;
+            border-color: #999;
         }
 
         /* 管理介面 */
@@ -136,7 +91,7 @@
             align-items: center;
             margin-bottom: 2rem;
             padding-bottom: 1.5rem;
-            border-bottom: 0.5px solid var(--color-border-tertiary);
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .admin-title {
@@ -149,36 +104,68 @@
             align-items: center;
             gap: 12px;
             font-size: 14px;
-            color: var(--color-text-secondary);
+            color: #888780;
         }
 
         .logout-btn {
             padding: 8px 16px;
-            border: 0.5px solid var(--color-border-secondary);
-            border-radius: var(--border-radius-md);
-            background: transparent;
-            color: var(--color-text-primary);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            color: #2c2c2a;
             font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .logout-btn:hover {
-            background: var(--color-background-secondary);
-            border-color: var(--color-border-primary);
+            background: #f5f5f5;
+            border-color: #999;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: #888780;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: #2c2c2a;
+            border-bottom-color: #ffb3d9;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
         .card {
-            background: var(--color-background-primary);
-            border: 0.5px solid var(--color-border-tertiary);
-            border-radius: var(--border-radius-lg);
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
             padding: 1.5rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
@@ -198,39 +185,36 @@
             font-size: 13px;
             font-weight: 500;
             margin-bottom: 0.5rem;
-            color: var(--color-text-secondary);
+            color: #888780;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 8px 12px;
-            border: 0.5px solid var(--color-border-tertiary);
-            border-radius: var(--border-radius-md);
-            font-family: var(--font-sans);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
             font-size: 14px;
-            color: var(--color-text-primary);
-            background: var(--color-background-primary);
+            color: #2c2c2a;
         }
 
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--color-border-primary);
-            background: var(--color-background-secondary);
+            border-color: #ffb3d9;
+            background: #fffbf0;
         }
 
-        .button-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 1.5rem;
+        textarea {
+            resize: vertical;
+            min-height: 60px;
         }
 
         button {
-            flex: 1;
             padding: 10px 16px;
-            border: 0.5px solid var(--color-border-secondary);
-            border-radius: var(--border-radius-md);
-            background: transparent;
-            color: var(--color-text-primary);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            color: #2c2c2a;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
@@ -238,120 +222,79 @@
         }
 
         button:hover {
-            background: var(--color-background-secondary);
-            border-color: var(--color-border-primary);
+            background: #f5f5f5;
+            border-color: #999;
         }
 
-        button:active {
-            transform: scale(0.98);
+        .btn-success {
+            border-color: #51cf66;
+            color: #51cf66;
+            margin-top: 1rem;
+            width: 100%;
         }
 
-        .btn-add {
-            border-color: var(--color-border-success);
-            color: var(--color-text-success);
-        }
-
-        .btn-add:hover {
-            background: var(--color-background-success);
+        .btn-success:hover {
+            background: #eaf3de;
         }
 
         .btn-danger {
-            border-color: var(--color-border-danger);
-            color: var(--color-text-danger);
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+            padding: 6px 12px;
+            font-size: 12px;
         }
 
         .btn-danger:hover {
-            background: var(--color-background-danger);
+            background: #fcebeb;
         }
 
-        .rewards-list {
-            margin-top: 2rem;
-        }
-
-        .reward-item {
-            background: var(--color-background-secondary);
-            border: 0.5px solid var(--color-border-tertiary);
-            border-radius: var(--border-radius-md);
+        .list-item {
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
             padding: 1rem;
             margin-bottom: 0.75rem;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .reward-image {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--border-radius-md);
-            object-fit: cover;
-            background: var(--color-background-tertiary);
-        }
-
-        .reward-emoji-fallback {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--border-radius-md);
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            background: var(--color-background-tertiary);
         }
 
-        .reward-info {
+        .list-item-info {
             flex: 1;
         }
 
-        .reward-emoji {
-            font-size: 24px;
-            margin-right: 0.75rem;
-        }
-
-        .reward-details {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .reward-name {
+        .list-item-name {
             font-weight: 500;
-            color: var(--color-text-primary);
+            margin-bottom: 0.25rem;
         }
 
-        .reward-cost {
-            font-size: 13px;
-            color: var(--color-text-secondary);
+        .list-item-meta {
+            font-size: 12px;
+            color: #888780;
         }
 
-        .reward-actions {
+        .list-actions {
             display: flex;
             gap: 8px;
         }
 
-        .reward-actions button {
-            padding: 6px 12px;
-            font-size: 12px;
-            flex: none;
-        }
-
         .message {
             padding: 1rem;
-            border-radius: var(--border-radius-md);
+            border-radius: 8px;
             margin-bottom: 1.5rem;
             font-size: 14px;
         }
 
         .message.success {
-            background: var(--color-background-success);
-            border: 0.5px solid var(--color-border-success);
-            color: var(--color-text-success);
+            background: #eaf3de;
+            border: 1px solid #51cf66;
+            color: #3b6d11;
         }
 
         .message.error {
-            background: var(--color-background-danger);
-            border: 0.5px solid var(--color-border-danger);
-            color: var(--color-text-danger);
+            background: #fcebeb;
+            border: 1px solid #ff6b6b;
+            color: #a32d2d;
         }
 
         .stats-grid {
@@ -362,101 +305,72 @@
         }
 
         .stat-card {
-            background: var(--color-background-secondary);
-            border: 0.5px solid var(--color-border-tertiary);
-            border-radius: var(--border-radius-md);
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
             padding: 1rem;
             text-align: center;
         }
 
         .stat-label {
             font-size: 12px;
-            color: var(--color-text-secondary);
+            color: #888780;
             margin-bottom: 0.5rem;
         }
 
         .stat-value {
             font-size: 28px;
             font-weight: 500;
-            color: var(--color-text-primary);
+            color: #2c2c2a;
         }
 
-        .emoji-picker {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin-top: 0.5rem;
-            max-height: 200px;
-            overflow-y: auto;
+        .history-item {
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
         }
 
-        .emoji-btn {
-            padding: 8px;
-            border: 0.5px solid var(--color-border-tertiary);
-            border-radius: var(--border-radius-md);
-            background: transparent;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .emoji-btn:hover {
-            background: var(--color-background-secondary);
-            border-color: var(--color-border-primary);
-        }
-
-        .emoji-btn.selected {
-            background: var(--color-background-info);
-            border-color: var(--color-border-info);
-        }
-
-
-        .history-edit-form {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 0.5px solid var(--color-border-tertiary);
-        }
-
-        .history-meta-row {
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            margin-top: 0.35rem;
-            line-height: 1.5;
-        }
-
-        .history-points-badge {
-            display: inline-flex;
+        .history-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            min-width: 60px;
-            padding: 0.5rem 0.75rem;
-            border-radius: var(--border-radius-md);
-            font-weight: 600;
-            background: var(--color-background-info);
-            color: var(--color-text-info);
+            margin-bottom: 0.5rem;
         }
 
-        .history-points-badge.negative {
-            background: var(--color-background-danger);
-            color: var(--color-text-danger);
+        .history-points {
+            font-weight: 500;
+            font-size: 16px;
         }
 
-        .compact-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.75rem;
+        .history-points.positive {
+            color: #51cf66;
         }
 
-        @media (max-width: 720px) {
-            .compact-grid {
-                grid-template-columns: 1fr;
-            }
+        .history-points.negative {
+            color: #ff6b6b;
+        }
+
+        .history-reason {
+            font-size: 13px;
+            margin-bottom: 0.25rem;
+        }
+
+        .history-meta {
+            font-size: 12px;
+            color: #888780;
         }
 
         .no-data {
             text-align: center;
-            color: var(--color-text-secondary);
+            color: #888780;
             padding: 2rem 1rem;
+        }
+
+        .scroll-container {
+            max-height: 500px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -469,16 +383,12 @@
                 <p class="login-subtitle">請選擇身份登入</p>
                 
                 <div class="parent-buttons">
-                    <button class="btn-parent" onclick="login('爸爸')">
-                        👨 爸爸
-                    </button>
-                    <button class="btn-parent" onclick="login('媽媽')">
-                        👩 媽媽
-                    </button>
+                    <button class="btn-parent" onclick="login('爸爸')">👨 爸爸</button>
+                    <button class="btn-parent" onclick="login('媽媽')">👩 媽媽</button>
                 </div>
 
-                <p style="text-align: center; font-size: 12px; color: var(--color-text-secondary);">
-                    Yuki 集點系統 - 獎品管理
+                <p style="text-align: center; font-size: 12px; color: #888780;">
+                    Yuki 集點系統 - 後台管理
                 </p>
             </div>
         </div>
@@ -486,9 +396,7 @@
         <!-- 管理介面 -->
         <div id="adminScreen" class="hidden">
             <div class="admin-header">
-                <div>
-                    <h1 class="admin-title">🎁 獎品管理</h1>
-                </div>
+                <h1 class="admin-title">⚙️ 管理後台</h1>
                 <div class="admin-user">
                     <span id="currentUser"></span>
                     <button class="logout-btn" onclick="logout()">登出</button>
@@ -497,98 +405,100 @@
 
             <div id="message"></div>
 
-            <!-- 統計卡片 -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">目前總點數</div>
-                    <div class="stat-value" id="totalPointsStat">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">獎品數量</div>
-                    <div class="stat-value" id="rewardCountStat">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">加分記錄</div>
-                    <div class="stat-value" id="historyCountStat">0</div>
-                </div>
+            <!-- 標籤頁 -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('rewards')">🎁 獎品管理</button>
+                <button class="tab-btn" onclick="switchTab('reasons')">📝 加減點原因</button>
+                <button class="tab-btn" onclick="switchTab('history')">📋 加減點記錄</button>
             </div>
 
-            <!-- 新增獎品 -->
-            <div class="cards-grid">
-                <div class="card">
-                    <h2 class="card-title">⚙️ 加減點數設定</h2>
-
-                    <div class="form-group">
-                        <label class="form-label">新增原因選項</label>
-                        <div class="button-group" style="margin-top: 0;">
-                            <input type="text" id="newReasonOption" placeholder="例如：主動整理玩具">
-                            <button class="btn-add" type="button" onclick="addReasonOption()" style="flex: 0 0 auto;">新增</button>
+            <!-- 獎品管理標籤 -->
+            <div id="rewards" class="tab-content active">
+                <div class="cards-grid">
+                    <div class="card">
+                        <h2 class="card-title">➕ 新增獎品</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">獎品名稱</label>
+                            <input type="text" id="newRewardName" placeholder="例如：冰淇淋">
                         </div>
-                    </div>
 
-                    <div id="reasonOptionsList" class="rewards-list">
-                        <div class="no-data">載入中...</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2 class="card-title">➕ 新增獎品</h2>
-                    
-                    <div class="form-group">
-                        <label class="form-label">獎品名稱</label>
-                        <input type="text" id="newRewardName" placeholder="例如：冰淇淋">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">點數成本</label>
-                        <input type="number" id="newRewardCost" placeholder="例如：15" min="1">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">獎品連結 (可選)</label>
-                        <input type="url" id="newRewardLink" placeholder="例如：https://example.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">獎品圖片 (可選)</label>
-                        <input type="file" id="newRewardImage" accept="image/*">
-                        <div style="margin-top: 0.5rem; font-size: 12px; color: var(--color-text-secondary);">
-                            預覽：<img id="imagePreview" style="max-width: 100%; max-height: 100px; margin-top: 0.5rem; border-radius: 4px;">
+                        <div class="form-group">
+                            <label class="form-label">點數成本</label>
+                            <input type="number" id="newRewardCost" placeholder="例如：15" min="1">
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="form-label">選擇符號</label>
-                        <div class="emoji-picker" id="emojiPicker"></div>
-                        <div style="margin-top: 0.5rem; font-size: 14px; color: var(--color-text-secondary);">
-                            已選擇：<span id="selectedEmoji">🎁</span>
+                        <div class="form-group">
+                            <label class="form-label">獎品連結 (可選)</label>
+                            <input type="url" id="newRewardLink" placeholder="https://example.com">
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label">獎品圖片 (可選)</label>
+                            <input type="file" id="newRewardImage" accept="image/*">
+                            <div style="margin-top: 0.5rem; font-size: 12px; color: #888780;">
+                                預覽：<img id="imagePreview" style="max-width: 100%; max-height: 100px; margin-top: 0.5rem; border-radius: 4px;">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">選擇符號</label>
+                            <div id="emojiPicker" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 0.5rem;"></div>
+                            <div style="margin-top: 0.5rem; font-size: 14px;">
+                                已選擇：<span id="selectedEmoji">🎁</span>
+                            </div>
+                        </div>
+
+                        <button class="btn-success" onclick="addReward()">✓ 新增獎品</button>
                     </div>
 
-                    <button class="btn-add" onclick="addReward()" style="width: 100%; margin-top: 1rem;">✓ 新增獎品</button>
-                </div>
-
-                <!-- 獎品統計 -->
-                <div class="card">
-                    <h2 class="card-title">📊 獎品統計</h2>
-                    <div id="rewardStats" style="padding: 1rem; font-size: 14px;">
-                        <p style="color: var(--color-text-secondary);">載入中...</p>
+                    <div class="card">
+                        <h2 class="card-title">🎯 現有獎品</h2>
+                        <div class="scroll-container" id="rewardsList">
+                            <div class="no-data">還沒有獎品</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card" style="margin-bottom: 2rem;">
-                <h2 class="card-title">🛠️ 加減點記錄管理</h2>
-                <div id="historyManagerList" class="rewards-list">
-                    <div class="no-data">載入中...</div>
+            <!-- 加減點原因管理標籤 -->
+            <div id="reasons" class="tab-content">
+                <div class="cards-grid">
+                    <div class="card">
+                        <h2 class="card-title">➕ 新增加減點原因</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">原因名稱</label>
+                            <input type="text" id="newReasonName" placeholder="例如：完成家務、守紀律等">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">類型</label>
+                            <select id="newReasonType">
+                                <option value="positive">加分原因</option>
+                                <option value="negative">扣分原因</option>
+                            </select>
+                        </div>
+
+                        <button class="btn-success" onclick="addReason()">✓ 新增原因</button>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">📝 現有原因</h2>
+                        <div class="scroll-container" id="reasonsList">
+                            <div class="no-data">還沒有原因</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 獎品列表 -->
-            <div class="card">
-                <h2 class="card-title">🎯 現有獎品</h2>
-                <div class="rewards-list" id="rewardsList">
-                    <div class="no-data">還沒有獎品</div>
+            <!-- 加減點記錄管理標籤 -->
+            <div id="history" class="tab-content">
+                <div class="card">
+                    <h2 class="card-title">📋 加減點記錄</h2>
+                    <div class="scroll-container" id="historyList">
+                        <div class="no-data">還沒有記錄</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -598,16 +508,18 @@
         const emojis = ['🎁', '🍦', '📚', '🎡', '🎬', '🎮', '🍕', '👕', '⚽', '🎸', '🏆', '🚗', '🌟', '💎', '🎪'];
         let selectedEmoji = '🎁';
         let currentUser = null;
-        let editingId = null;
-        let editingHistoryId = null;
+        let editingRewardId = null;
 
         // 初始化
         function init() {
             renderEmojiPicker();
             checkLogin();
-            
-            // 圖片預覽
-            document.getElementById('newRewardImage').addEventListener('change', function(e) {
+            setupImagePreview();
+        }
+
+        // 圖片預覽
+        function setupImagePreview() {
+            document.getElementById('newRewardImage')?.addEventListener('change', function(e) {
                 if (e.target.files.length > 0) {
                     const reader = new FileReader();
                     reader.onload = (event) => {
@@ -618,9 +530,9 @@
             });
         }
 
-        // 检查登入狀態
+        // 檢查登入狀態
         function checkLogin() {
-            const saved = sessionStorage.getItem('adminUser');
+            const saved = localStorage.getItem('adminUser');
             if (saved) {
                 currentUser = saved;
                 showAdminScreen();
@@ -630,7 +542,7 @@
         // 登入
         function login(user) {
             currentUser = user;
-            sessionStorage.setItem('adminUser', user);
+            localStorage.setItem('adminUser', user);
             showAdminScreen();
         }
 
@@ -638,16 +550,10 @@
         function logout() {
             if (confirm('確定要登出嗎？')) {
                 currentUser = null;
-                sessionStorage.removeItem('adminUser');
-                showLoginScreen();
-                clearForm();
+                localStorage.removeItem('adminUser');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('adminScreen').classList.add('hidden');
             }
-        }
-
-        // 顯示登入介面
-        function showLoginScreen() {
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('adminScreen').classList.add('hidden');
         }
 
         // 顯示管理介面
@@ -655,346 +561,25 @@
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('adminScreen').classList.remove('hidden');
             document.getElementById('currentUser').textContent = `👤 ${currentUser}`;
-            loadReasonOptions();
             loadRewards();
-            loadHistoryManager();
-            updateStats();
+            loadReasons();
+            loadHistory();
         }
 
-        function getSettings() {
-            const saved = localStorage.getItem('yukiSettings');
-            return saved ? JSON.parse(saved) : {
-                reasonOptions: ['完成家務', '守規矩', '主動練習', '亂發脾氣', '沒有收拾']
-            };
-        }
-
-        function saveSettings(settings) {
-            localStorage.setItem('yukiSettings', JSON.stringify(settings));
-        }
-
-        function loadReasonOptions() {
-            const settings = getSettings();
-            const list = document.getElementById('reasonOptionsList');
-            const reasonOptions = Array.isArray(settings.reasonOptions) ? settings.reasonOptions : [];
-
-            if (reasonOptions.length === 0) {
-                list.innerHTML = '<div class="no-data">還沒有原因選項</div>';
-                return;
-            }
-
-            list.innerHTML = reasonOptions.map((reason, index) => `
-                <div class="reward-item">
-                    <div class="reward-emoji-fallback">📝</div>
-                    <div class="reward-info">
-                        <div class="reward-name">${reason}</div>
-                        <div class="reward-cost">前台會顯示於原因選單</div>
-                    </div>
-                    <div class="reward-actions">
-                        <button class="btn-danger" type="button" onclick="deleteReasonOption(${index})">刪除</button>
-                    </div>
-                </div>
-            `).join('') + `
-                <div class="reward-item">
-                    <div class="reward-emoji-fallback">✏️</div>
-                    <div class="reward-info">
-                        <div class="reward-name">其他</div>
-                        <div class="reward-cost">固定保留，前台可填寫備註</div>
-                    </div>
-                    <div class="reward-actions"></div>
-                </div>
-            `;
-        }
-
-        function addReasonOption() {
-            const input = document.getElementById('newReasonOption');
-            const value = input.value.trim();
-            if (!value) {
-                showMessage('請輸入原因選項名稱', 'error');
-                return;
-            }
-
-            const settings = getSettings();
-            const current = Array.isArray(settings.reasonOptions) ? settings.reasonOptions : [];
-            if (current.includes(value)) {
-                showMessage('這個原因選項已存在', 'error');
-                return;
-            }
-
-            current.push(value);
-            settings.reasonOptions = current;
-            saveSettings(settings);
-            loadReasonOptions();
-            input.value = '';
-            showMessage(`已新增原因選項「${value}」`, 'success');
-        }
-
-        function deleteReasonOption(index) {
-            const settings = getSettings();
-            const current = Array.isArray(settings.reasonOptions) ? settings.reasonOptions : [];
-            const removed = current[index];
-            if (!removed) return;
-            if (!confirm(`確定要刪除原因選項「${removed}」嗎？`)) {
-                return;
-            }
-
-            current.splice(index, 1);
-            settings.reasonOptions = current;
-            saveSettings(settings);
-            loadReasonOptions();
-            showMessage(`已刪除原因選項「${removed}」`, 'success');
-        }
-
-
-        function escapeHtml(value) {
-            return String(value ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
-        function getPointData() {
-            const saved = JSON.parse(localStorage.getItem('yukiPoints') || '{}');
-            return {
-                points: Number(saved.points) || 0,
-                history: Array.isArray(saved.history) ? saved.history : [],
-                redeemed: Array.isArray(saved.redeemed) ? saved.redeemed : []
-            };
-        }
-
-        function savePointData(data) {
-            localStorage.setItem('yukiPoints', JSON.stringify({
-                points: Number(data.points) || 0,
-                history: Array.isArray(data.history) ? data.history : [],
-                redeemed: Array.isArray(data.redeemed) ? data.redeemed : []
-            }));
-        }
-
-        function normalizeHistoryItem(item, index) {
-            return {
-                id: item.id || `history-${index}`,
-                points: Number(item.points) || 0,
-                reason: item.reason || '',
-                reasonCategory: item.reasonCategory || item.reason || '',
-                evaluator: item.evaluator || '',
-                evaluatorCategory: item.evaluatorCategory || item.evaluator || '',
-                date: item.date || '',
-                note: item.note || ''
-            };
-        }
-
-        function loadHistoryManager() {
-            const pointData = getPointData();
-            pointData.history = pointData.history.map(normalizeHistoryItem);
-            savePointData(pointData);
-
-            const list = document.getElementById('historyManagerList');
-            if (!pointData.history.length) {
-                list.innerHTML = '<div class="no-data">還沒有加減點記錄</div>';
-                return;
-            }
-
-            list.innerHTML = pointData.history.map((item, index) => {
-                const normalized = normalizeHistoryItem(item, index);
-                const isEditing = editingHistoryId === normalized.id;
-                const isOtherReason = normalized.reasonCategory === '其他';
-                const isOtherEvaluator = normalized.evaluatorCategory === '其他';
-                const settings = getSettings();
-                const reasonOptions = Array.isArray(settings.reasonOptions) ? settings.reasonOptions : [];
-                const reasonSelect = ['<option value="">--請選擇--</option>']
-                    .concat(reasonOptions.map(reason => `<option value="${escapeHtml(reason)}" ${normalized.reasonCategory === reason ? 'selected' : ''}>${escapeHtml(reason)}</option>`))
-                    .concat([`<option value="其他" ${isOtherReason ? 'selected' : ''}>其他</option>`])
-                    .join('');
-                const evaluatorSelect = `
-                    <option value="">--請選擇--</option>
-                    <option value="爸爸" ${normalized.evaluatorCategory === '爸爸' ? 'selected' : ''}>爸爸</option>
-                    <option value="媽媽" ${normalized.evaluatorCategory === '媽媽' ? 'selected' : ''}>媽媽</option>
-                    <option value="其他" ${isOtherEvaluator ? 'selected' : ''}>其他</option>
-                `;
-                return `
-                    <div class="reward-item" style="grid-template-columns: auto 1fr auto; align-items: start;">
-                        <div>
-                            <div class="history-points-badge ${normalized.points < 0 ? 'negative' : ''}">${normalized.points > 0 ? '+' : ''}${normalized.points}</div>
-                        </div>
-                        <div class="reward-info">
-                            <div class="reward-name">${escapeHtml(normalized.reason || '未填寫原因')}</div>
-                            <div class="history-meta-row">加減點數的人：${escapeHtml(normalized.evaluator || '未填寫')}</div>
-                            <div class="history-meta-row">時間：${escapeHtml(normalized.date || '未填寫')}</div>
-                            ${normalized.note ? `<div class="history-meta-row">備註：${escapeHtml(normalized.note)}</div>` : ''}
-                            ${isEditing ? `
-                                <div class="history-edit-form">
-                                    <div class="compact-grid">
-                                        <div class="form-group">
-                                            <label class="form-label">點數</label>
-                                            <input type="number" id="editHistoryPoints-${normalized.id}" value="${normalized.points}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">時間</label>
-                                            <input type="text" id="editHistoryDate-${normalized.id}" value="${escapeHtml(normalized.date)}" placeholder="例如：2026/4/1 下午 8:00:00">
-                                        </div>
-                                    </div>
-                                    <div class="compact-grid">
-                                        <div class="form-group">
-                                            <label class="form-label">原因</label>
-                                            <select id="editHistoryReasonCategory-${normalized.id}" onchange="toggleEditHistoryReasonOther('${normalized.id}')">${reasonSelect}</select>
-                                        </div>
-                                        <div class="form-group" id="editHistoryReasonOtherGroup-${normalized.id}" style="display:${isOtherReason ? 'block' : 'none'};">
-                                            <label class="form-label">其他原因備註</label>
-                                            <input type="text" id="editHistoryReasonOther-${normalized.id}" value="${isOtherReason ? escapeHtml(normalized.reason) : ''}">
-                                        </div>
-                                    </div>
-                                    <div class="compact-grid">
-                                        <div class="form-group">
-                                            <label class="form-label">加減點數的人</label>
-                                            <select id="editHistoryEvaluatorCategory-${normalized.id}" onchange="toggleEditHistoryEvaluatorOther('${normalized.id}')">${evaluatorSelect}</select>
-                                        </div>
-                                        <div class="form-group" id="editHistoryEvaluatorOtherGroup-${normalized.id}" style="display:${isOtherEvaluator ? 'block' : 'none'};">
-                                            <label class="form-label">其他人備註</label>
-                                            <input type="text" id="editHistoryEvaluatorOther-${normalized.id}" value="${isOtherEvaluator ? escapeHtml(normalized.evaluator) : ''}">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">備註（可選）</label>
-                                        <input type="text" id="editHistoryNote-${normalized.id}" value="${escapeHtml(normalized.note || '')}" placeholder="補充說明">
-                                    </div>
-                                    <div class="reward-actions">
-                                        <button type="button" onclick="saveHistoryEdit('${normalized.id}')">儲存</button>
-                                        <button type="button" onclick="cancelHistoryEdit()">取消</button>
-                                    </div>
-                                </div>
-                            ` : ''}
-                        </div>
-                        <div class="reward-actions">
-                            ${isEditing ? '' : `<button type="button" onclick="editHistoryItem('${normalized.id}')">修正</button>`}
-                            <button class="btn-danger" type="button" onclick="deleteHistoryItem('${normalized.id}')">刪除</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function recalculatePoints(history, redeemed) {
-            const historyPoints = history.reduce((sum, item) => sum + (Number(item.points) || 0), 0);
-            const redeemedCost = redeemed.reduce((sum, item) => sum + (Number(item.cost) || 0), 0);
-            return historyPoints - redeemedCost;
-        }
-
-        function editHistoryItem(id) {
-            editingHistoryId = id;
-            loadHistoryManager();
-        }
-
-        function cancelHistoryEdit() {
-            editingHistoryId = null;
-            loadHistoryManager();
-        }
-
-        function toggleEditHistoryReasonOther(id) {
-            const select = document.getElementById(`editHistoryReasonCategory-${id}`);
-            const group = document.getElementById(`editHistoryReasonOtherGroup-${id}`);
-            const input = document.getElementById(`editHistoryReasonOther-${id}`);
-            const isOther = select.value === '其他';
-            group.style.display = isOther ? 'block' : 'none';
-            if (!isOther && input) input.value = '';
-        }
-
-        function toggleEditHistoryEvaluatorOther(id) {
-            const select = document.getElementById(`editHistoryEvaluatorCategory-${id}`);
-            const group = document.getElementById(`editHistoryEvaluatorOtherGroup-${id}`);
-            const input = document.getElementById(`editHistoryEvaluatorOther-${id}`);
-            const isOther = select.value === '其他';
-            group.style.display = isOther ? 'block' : 'none';
-            if (!isOther && input) input.value = '';
-        }
-
-        function saveHistoryEdit(id) {
-            const pointData = getPointData();
-            const history = pointData.history.map(normalizeHistoryItem);
-            const index = history.findIndex(item => item.id === id);
-            if (index === -1) {
-                showMessage('找不到要修正的記錄', 'error');
-                return;
-            }
-
-            const points = parseInt(document.getElementById(`editHistoryPoints-${id}`).value, 10);
-            const reasonCategory = document.getElementById(`editHistoryReasonCategory-${id}`).value;
-            const reasonOther = (document.getElementById(`editHistoryReasonOther-${id}`) || {}).value?.trim?.() || '';
-            const evaluatorCategory = document.getElementById(`editHistoryEvaluatorCategory-${id}`).value;
-            const evaluatorOther = (document.getElementById(`editHistoryEvaluatorOther-${id}`) || {}).value?.trim?.() || '';
-            const date = document.getElementById(`editHistoryDate-${id}`).value.trim();
-            const note = document.getElementById(`editHistoryNote-${id}`).value.trim();
-
-            if (Number.isNaN(points)) {
-                showMessage('請輸入有效點數', 'error');
-                return;
-            }
-            if (!reasonCategory) {
-                showMessage('請選擇原因', 'error');
-                return;
-            }
-            if (reasonCategory === '其他' && !reasonOther) {
-                showMessage('請輸入其他原因備註', 'error');
-                return;
-            }
-            if (!evaluatorCategory) {
-                showMessage('請選擇加減點數的人', 'error');
-                return;
-            }
-            if (evaluatorCategory === '其他' && !evaluatorOther) {
-                showMessage('請輸入其他人備註', 'error');
-                return;
-            }
-            if (!date) {
-                showMessage('請輸入時間', 'error');
-                return;
-            }
-
-            history[index] = {
-                ...history[index],
-                points,
-                reasonCategory,
-                reason: reasonCategory === '其他' ? reasonOther : reasonCategory,
-                evaluatorCategory,
-                evaluator: evaluatorCategory === '其他' ? evaluatorOther : evaluatorCategory,
-                date,
-                note
-            };
-
-            pointData.history = history;
-            pointData.points = recalculatePoints(history, pointData.redeemed);
-            savePointData(pointData);
-            editingHistoryId = null;
-            loadHistoryManager();
-            updateStats();
-            showMessage('已修正加減點記錄', 'success');
-        }
-
-        function deleteHistoryItem(id) {
-            const pointData = getPointData();
-            const history = pointData.history.map(normalizeHistoryItem);
-            const target = history.find(item => item.id === id);
-            if (!target) return;
-            if (!confirm(`確定要刪除這筆記錄嗎？\n${target.reason}（${target.points > 0 ? '+' : ''}${target.points}）`)) {
-                return;
-            }
-
-            pointData.history = history.filter(item => item.id !== id);
-            pointData.points = recalculatePoints(pointData.history, pointData.redeemed);
-            savePointData(pointData);
-            if (editingHistoryId === id) editingHistoryId = null;
-            loadHistoryManager();
-            updateStats();
-            showMessage('已刪除加減點記錄', 'success');
+        // 切換標籤
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
         }
 
         // 渲染emoji選擇器
         function renderEmojiPicker() {
             const picker = document.getElementById('emojiPicker');
             picker.innerHTML = emojis.map(emoji => `
-                <button type="button" class="emoji-btn ${emoji === '🎁' ? 'selected' : ''}" onclick="selectEmoji('${emoji}')">
-                    ${emoji}
-                </button>
+                <button type="button" style="padding: 8px; border: 1px solid #ddd; border-radius: 8px; background: white; font-size: 24px; cursor: pointer; transition: all 0.2s; ${emoji === '🎁' ? 'border-color: #ffb3d9; background: #fff0f6;' : ''}" 
+                    onclick="selectEmoji('${emoji}')" class="emoji-btn">${emoji}</button>
             `).join('');
         }
 
@@ -1003,11 +588,11 @@
             selectedEmoji = emoji;
             document.getElementById('selectedEmoji').textContent = emoji;
             document.querySelectorAll('.emoji-btn').forEach(btn => {
-                btn.classList.remove('selected');
-                if (btn.textContent.trim() === emoji) {
-                    btn.classList.add('selected');
-                }
+                btn.style.borderColor = '#ddd';
+                btn.style.background = 'white';
             });
+            event.target.style.borderColor = '#ffb3d9';
+            event.target.style.background = '#fff0f6';
         }
 
         // 新增獎品
@@ -1027,11 +612,6 @@
             }
 
             const processReward = (imageData) => {
-                if (editingId !== null) {
-                    updateReward(editingId, imageData);
-                    return;
-                }
-
                 const rewards = getRewards();
                 const newId = Math.max(...rewards.map(r => r.id || 0), 0) + 1;
                 
@@ -1048,12 +628,10 @@
 
                 saveRewards(rewards);
                 loadRewards();
-                updateStats();
-                clearForm();
+                clearRewardForm();
                 showMessage(`成功新增「${name}」！`, 'success');
             };
 
-            // 如果有圖片就轉換成 base64
             if (imageInput.files.length > 0) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -1072,113 +650,188 @@
                 rewards = rewards.filter(r => r.id !== id);
                 saveRewards(rewards);
                 loadRewards();
-                updateStats();
                 showMessage('已刪除獎品', 'success');
             }
         }
 
-        // 加載獎品列表
+        // 加載獎品
         function loadRewards() {
             const rewards = getRewards();
             const list = document.getElementById('rewardsList');
 
             if (rewards.length === 0) {
-                list.innerHTML = '<div class="no-data">還沒有獎品，快新增一個吧！</div>';
+                list.innerHTML = '<div class="no-data">還沒有獎品</div>';
                 return;
             }
 
             list.innerHTML = rewards.map(reward => `
-                <div class="reward-item">
-                    <div>
-                        ${reward.image ? 
-                            `<img src="${reward.image}" class="reward-image" alt="${reward.name}">` :
-                            `<div class="reward-emoji-fallback">${reward.emoji}</div>`
-                        }
+                <div class="list-item">
+                    <div class="list-item-info">
+                        <div class="list-item-name">${reward.emoji} ${reward.name}</div>
+                        <div class="list-item-meta">${reward.cost} 點 • ${reward.createdBy}</div>
                     </div>
-                    <div class="reward-info">
-                        <div class="reward-name">${reward.name}</div>
-                        <div class="reward-cost">${reward.cost} 點</div>
-                        ${reward.link ? `<div style="font-size: 12px; color: var(--color-text-info); margin-top: 0.25rem;"><a href="${reward.link}" target="_blank" style="color: inherit;">🔗 查看詳情</a></div>` : ''}
-                        <div style="font-size: 12px; color: var(--color-text-secondary); margin-top: 0.25rem;">👤 ${reward.createdBy || '未知'}</div>
-                    </div>
-                    <div class="reward-actions">
-                        <button onclick="editReward(${reward.id})">編輯</button>
+                    <div class="list-actions">
                         <button class="btn-danger" onclick="deleteReward(${reward.id})">刪除</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // 編輯獎品
-        function editReward(id) {
-            const rewards = getRewards();
-            const reward = rewards.find(r => r.id === id);
-            
-            document.getElementById('newRewardName').value = reward.name;
-            document.getElementById('newRewardCost').value = reward.cost;
-            document.getElementById('newRewardLink').value = reward.link || '';
-            selectEmoji(reward.emoji);
-            editingId = id;
-
-            // 顯示現有圖片預覽
-            if (reward.image) {
-                document.getElementById('imagePreview').src = reward.image;
-            } else {
-                document.getElementById('imagePreview').src = '';
-            }
-
-            const btn = document.querySelector('button[onclick="addReward()"]');
-            btn.textContent = '✎ 更新獎品';
-
-            document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // 更新獎品
-        function updateReward(id, imageData) {
-            const name = document.getElementById('newRewardName').value.trim();
-            const cost = parseInt(document.getElementById('newRewardCost').value);
-            const link = document.getElementById('newRewardLink').value.trim();
+        // 新增加減點原因
+        function addReason() {
+            const name = document.getElementById('newReasonName').value.trim();
+            const type = document.getElementById('newReasonType').value;
 
             if (!name) {
-                showMessage('請輸入獎品名稱', 'error');
-                return;
-            }
-            if (isNaN(cost) || cost < 1) {
-                showMessage('請輸入有效的點數', 'error');
+                showMessage('請輸入原因名稱', 'error');
                 return;
             }
 
-            let rewards = getRewards();
-            const reward = rewards.find(r => r.id === id);
-            reward.name = name;
-            reward.cost = cost;
-            reward.emoji = selectedEmoji;
-            reward.link = link || null;
+            const reasons = getReasons();
+            const newId = Math.max(...reasons.map(r => r.id || 0), 0) + 1;
             
-            // 只在有新圖片時更新，否則保留舊的
-            if (imageData !== undefined) {
-                reward.image = imageData;
+            reasons.push({
+                id: newId,
+                name: name,
+                type: type,
+                createdBy: currentUser,
+                createdAt: new Date().toLocaleString('zh-Hant-TW')
+            });
+
+            saveReasons(reasons);
+            loadReasons();
+            clearReasonForm();
+            showMessage(`成功新增「${name}」！`, 'success');
+        }
+
+        // 刪除原因
+        function deleteReason(id) {
+            if (confirm('確定要刪除這個原因嗎？')) {
+                let reasons = getReasons();
+                reasons = reasons.filter(r => r.id !== id);
+                saveReasons(reasons);
+                loadReasons();
+                showMessage('已刪除原因', 'success');
+            }
+        }
+
+        // 加載原因
+        function loadReasons() {
+            const reasons = getReasons();
+            const list = document.getElementById('reasonsList');
+
+            if (reasons.length === 0) {
+                list.innerHTML = '<div class="no-data">還沒有原因</div>';
+                return;
             }
 
-            saveRewards(rewards);
-            loadRewards();
-            updateStats();
-            clearForm();
-            editingId = null;
-            showMessage(`已更新「${name}」！`, 'success');
+            list.innerHTML = reasons.map(reason => `
+                <div class="list-item">
+                    <div class="list-item-info">
+                        <div class="list-item-name">${reason.name}</div>
+                        <div class="list-item-meta">${reason.type === 'positive' ? '✅ 加分' : '❌ 扣分'} • ${reason.createdBy}</div>
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn-danger" onclick="deleteReason(${reason.id})">刪除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 編輯加減點記錄
+        function editHistory(index) {
+            const pointData = JSON.parse(localStorage.getItem('yukiPoints') || '{}');
+            const history = pointData.history || [];
+            const item = history[index];
+
+            if (!item) return;
+
+            const newPoints = prompt('輸入新的點數:', item.points);
+            if (newPoints === null) return;
+
+            const newReason = prompt('輸入新的原因:', item.reason);
+            if (newReason === null) return;
+
+            history[index].points = parseInt(newPoints);
+            history[index].reason = newReason;
+            history[index].modifiedBy = currentUser;
+            history[index].modifiedAt = new Date().toLocaleString('zh-Hant-TW');
+
+            // 重新計算總點數
+            const totalPoints = history.reduce((sum, h) => sum + h.points, 0);
+
+            pointData.points = totalPoints;
+            pointData.history = history;
+            localStorage.setItem('yukiPoints', JSON.stringify(pointData));
+
+            loadHistory();
+            showMessage('已修正記錄', 'success');
+        }
+
+        // 刪除加減點記錄
+        function deleteHistoryItem(index) {
+            if (confirm('確定要刪除這筆記錄嗎？')) {
+                const pointData = JSON.parse(localStorage.getItem('yukiPoints') || '{}');
+                const history = pointData.history || [];
+                
+                history.splice(index, 1);
+
+                // 重新計算總點數
+                const totalPoints = history.reduce((sum, h) => sum + h.points, 0);
+
+                pointData.points = totalPoints;
+                pointData.history = history;
+                localStorage.setItem('yukiPoints', JSON.stringify(pointData));
+
+                loadHistory();
+                showMessage('已刪除記錄', 'success');
+            }
+        }
+
+        // 加載歷史記錄
+        function loadHistory() {
+            const pointData = JSON.parse(localStorage.getItem('yukiPoints') || '{}');
+            const history = pointData.history || [];
+            const list = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                list.innerHTML = '<div class="no-data">還沒有記錄</div>';
+                return;
+            }
+
+            list.innerHTML = history.map((item, index) => `
+                <div class="history-item">
+                    <div class="history-header">
+                        <div>
+                            <div class="history-points ${item.points > 0 ? 'positive' : 'negative'}">
+                                ${item.points > 0 ? '➕' : '➖'} ${Math.abs(item.points)} 點
+                            </div>
+                            <div class="history-reason">${item.reason}</div>
+                            <div class="history-meta">評分者：${item.evaluator} | ${item.date}</div>
+                            ${item.modifiedBy ? `<div class="history-meta">修正者：${item.modifiedBy} | ${item.modifiedAt}</div>` : ''}
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-danger" onclick="editHistory(${index})">修正</button>
+                            <button class="btn-danger" onclick="deleteHistoryItem(${index})">刪除</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // 清除表單
-        function clearForm() {
+        function clearRewardForm() {
             document.getElementById('newRewardName').value = '';
             document.getElementById('newRewardCost').value = '';
             document.getElementById('newRewardLink').value = '';
             document.getElementById('newRewardImage').value = '';
             document.getElementById('imagePreview').src = '';
             selectEmoji('🎁');
-            editingId = null;
-            const btn = document.querySelector('button[onclick="addReward()"]');
-            if (btn) btn.textContent = '✓ 新增獎品';
+        }
+
+        function clearReasonForm() {
+            document.getElementById('newReasonName').value = '';
+            document.getElementById('newReasonType').value = 'positive';
         }
 
         // 顯示消息
@@ -1189,36 +842,6 @@
             setTimeout(() => {
                 messageEl.innerHTML = '';
             }, 3000);
-        }
-
-        // 更新統計
-        function updateStats() {
-            const rewards = getRewards();
-            const pointData = JSON.parse(localStorage.getItem('yukiPoints') || '{}');
-            const history = pointData.history || [];
-
-            document.getElementById('rewardCountStat').textContent = rewards.length;
-            document.getElementById('totalPointsStat').textContent = pointData.points || 0;
-            document.getElementById('historyCountStat').textContent = history.length;
-
-            // 獎品統計
-            const stats = document.getElementById('rewardStats');
-            if (rewards.length === 0) {
-                stats.innerHTML = '<p style="color: var(--color-text-secondary);">還沒有獎品</p>';
-            } else {
-                const avgCost = Math.round(rewards.reduce((sum, r) => sum + r.cost, 0) / rewards.length);
-                const minCost = Math.min(...rewards.map(r => r.cost));
-                const maxCost = Math.max(...rewards.map(r => r.cost));
-                
-                stats.innerHTML = `
-                    <div style="line-height: 1.8;">
-                        <div>總數：<strong>${rewards.length}</strong> 個</div>
-                        <div>最便宜：<strong>${minCost}</strong> 點</div>
-                        <div>最昂貴：<strong>${maxCost}</strong> 點</div>
-                        <div>平均價格：<strong>${avgCost}</strong> 點</div>
-                    </div>
-                `;
-            }
         }
 
         // 獲取獎品
@@ -1236,9 +859,24 @@
             ];
         }
 
-        // 保存獎品
         function saveRewards(rewards) {
             localStorage.setItem('yukiRewards', JSON.stringify(rewards));
+        }
+
+        // 獲取原因
+        function getReasons() {
+            const saved = localStorage.getItem('yukiReasons');
+            return saved ? JSON.parse(saved) : [
+                { id: 1, name: '完成家務', type: 'positive' },
+                { id: 2, name: '守紀律', type: 'positive' },
+                { id: 3, name: '幫助他人', type: 'positive' },
+                { id: 4, name: '不聽話', type: 'negative' },
+                { id: 5, name: '說謊', type: 'negative' },
+            ];
+        }
+
+        function saveReasons(reasons) {
+            localStorage.setItem('yukiReasons', JSON.stringify(reasons));
         }
 
         // 初始化頁面
