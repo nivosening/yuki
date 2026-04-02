@@ -522,16 +522,20 @@
             `).join('');
         }
 
-        function selectEmoji(emoji) {
-            selectedEmoji = emoji;
-            document.getElementById('selectedEmoji').textContent = emoji;
-            document.querySelectorAll('.emoji-btn').forEach(btn => {
-                btn.style.borderColor = '#ddd';
-                btn.style.background = 'white';
-            });
-            event.target.style.borderColor = '#ffb3d9';
-            event.target.style.background = '#fff0f6';
+function selectEmoji(emoji) {
+    selectedEmoji = emoji;
+    document.getElementById('selectedEmoji').textContent = emoji;
+
+    document.querySelectorAll('.emoji-btn').forEach(btn => {
+        btn.style.borderColor = '#ddd';
+        btn.style.background = 'white';
+
+        if (btn.textContent.trim() === emoji) {
+            btn.style.borderColor = '#ffb3d9';
+            btn.style.background = '#fff0f6';
         }
+    });
+}
 
         function showSyncStatus() {
             const el = document.getElementById('syncStatus');
