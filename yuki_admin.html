@@ -125,6 +125,34 @@
             border-color: #999;
         }
 
+        .back-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(107, 45, 92, 0.8);
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(107, 45, 92, 0.4);
+            border: none;
+            padding: 0;
+            z-index: 999;
+        }
+
+        .back-link:hover {
+            background: rgba(107, 45, 92, 1);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(107, 45, 92, 0.6);
+        }
+
         .tabs {
             display: flex;
             gap: 12px;
@@ -451,6 +479,8 @@
             </div>
         </div>
     </div>
+
+    <a href="yuki_main.html" class="back-link" title="返回集點卡">🏠</a>
 
     <script>
         // Firebase 設定
