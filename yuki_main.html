@@ -687,6 +687,39 @@
             });
         }
 
+<script>
+function calculateStats() {
+    const positiveHistory = history.filter(h => h.points > 0);
+    const negativeHistory = history.filter(h => h.points < 0);
+
+    const reasonCount = {};
+    positiveHistory.forEach(item => {
+        reasonCount[item.reason] = (reasonCount[item.reason] || 0) + 1;
+    });
+    const topReason = Object.entries(reasonCount).sort((a, b) => b[1] - a[1])[0];
+
+    const badReasonCount = {};
+    negativeHistory.forEach(item => {
+        badReasonCount[item.reason] = (badReasonCount[item.reason] || 0) + 1;
+    });
+    const topBadReason = Object.entries(badReasonCount).sort((a, b) => b[1] - a[1])[0];
+
+    const redeemCount = redeemHistory.length;
+    const totalSpent = redeemHistory.reduce((sum, item) => sum + (item.cost || 0), 0);
+
+    return {
+        addCount: positiveHistory.length,
+        minusCount: negativeHistory.length,
+        topReason: topReason ? topReason[0] : '---',
+        topReasonCount: topReason ? topReason[1] : 0,
+        topBadReason: topBadReason ? topBadReason[0] : '---',
+        topBadReasonCount: topBadReason ? topBadReason[1] : 0,
+        redeemCount,
+        totalSpent
+    };
+}
+</script>
+        
         function showMessage(text, type) {
             const messageEl = document.getElementById('message');
             const className = type === 'success' ? 'success-message' : 'error-message';
@@ -762,18 +795,59 @@
             }
 
             // 更新統計
-            const topStatsContainer = document.getElementById('topStatsContainer');
-            topStatsContainer.innerHTML = `
-                <div class="stat-item">
-                    <div class="stat-label">加分次數</div>
-                    <div class="stat-value">${history.filter(h => h.points > 0).length}</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label">扣分次數</div>
-                    <div class="stat-value">${history.filter(h => h.points < 0).length}</div>
-                </div>
-            `;
-        }
+           const stats = calculateStats();
+
+// 更新下方統計資訊
+const statsContent = document.getElementById('statsContent');
+statsContent.innerHTML = `
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-label">📝 加分次數</div>
+            <div class="stat-value">${stats.addCount}</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">⚠️ 扣分次數</div>
+            <div class="stat-value">${stats.minusCount}</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">🏆 已兌換獎品</div>
+            <div class="stat-value">${stats.redeemCount}</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">💰 花費點數</div>
+            <div class="stat-value">${stats.totalSpent}</div>
+        </div>
+    </div>
+    <div class="stats-detail">
+        <div class="stats-detail-item">
+            <span class="stats-detail-label">🌟 最常加分原因：</span>
+            <span class="stats-detail-value">${stats.topReason}</span>
+        </div>
+        <div class="stats-detail-item" style="font-size: 14px; opacity: 0.8;">
+            (出現 ${stats.topReasonCount} 次)
+        </div>
+        <div class="stats-detail-item">
+            <span class="stats-detail-label">❌ 最常扣分原因：</span>
+            <span class="stats-detail-value">${stats.topBadReason}</span>
+        </div>
+        <div class="stats-detail-item" style="font-size: 14px; opacity: 0.8;">
+            (出現 ${stats.topBadReasonCount} 次)
+        </div>
+    </div>
+`;
+
+// 更新上方小統計
+const topStatsContainer = document.getElementById('topStatsContainer');
+topStatsContainer.innerHTML = `
+    <div class="stat-item">
+        <div class="stat-label">加分次數</div>
+        <div class="stat-value">${stats.addCount}</div>
+    </div>
+    <div class="stat-item">
+        <div class="stat-label">扣分次數</div>
+        <div class="stat-value">${stats.minusCount}</div>
+    </div>
+`;
 
         // 監聽選擇
         document.addEventListener('DOMContentLoaded', function() {
