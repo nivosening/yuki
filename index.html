@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuki 集點卡 - 幼兒友善版</title>
+    <title>Yuki 集點卡 - Firebase 版</title>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
     <style>
         * {
             margin: 0;
@@ -275,25 +277,9 @@
             box-shadow: 0 6px 20px rgba(255, 179, 217, 0.3);
         }
 
-        .reward-image {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 0.8rem;
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .reward-emoji-fallback {
-            width: 100%;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .reward-emoji {
             font-size: 50px;
-            border-radius: 12px;
             margin-bottom: 0.8rem;
-            background: rgba(255, 255, 255, 0.3);
         }
 
         .reward-name {
@@ -456,6 +442,13 @@
         .hidden-input {
             display: none;
         }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 18px;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
@@ -489,6 +482,7 @@
                     <label class="form-label">原因：</label>
                     <select id="reasonSelect">
                         <option value="">--請選擇--</option>
+                        <option value="other">其他</option>
                     </select>
                 </div>
 
@@ -523,6 +517,7 @@
                 </div>
 
                 <div class="stats-grid" id="topStatsContainer">
+                    <div class="loading">載入中...</div>
                 </div>
             </div>
 
@@ -538,14 +533,14 @@
             <div class="card card-history">
                 <h3 class="section-title">📊 加減點記錄</h3>
                 <div class="scroll-container" id="historyList">
-                    <div class="empty-message">還沒有記錄</div>
+                    <div class="empty-message">載入中...</div>
                 </div>
             </div>
 
             <div class="card card-redeemed">
                 <h3 class="section-title">🏆 已兌換獎品</h3>
                 <div class="scroll-container" id="redeemList">
-                    <div class="empty-message">還沒有兌換過獎品</div>
+                    <div class="empty-message">載入中...</div>
                 </div>
             </div>
         </div>
@@ -559,75 +554,64 @@
     </div>
 
     <script>
+        // Firebase 設定
+        const firebaseConfig = {
+            apiKey: "AIzaSyD4UcxdSJFA3Jp0qgLjvIO7E-TvogyDNig",
+            authDomain: "point-system-52eac.firebaseapp.com",
+            databaseURL: "https://point-system-52eac-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "point-system-52eac",
+            storageBucket: "point-system-52eac.firebasestorage.app",
+            messagingSenderId: "1071484950223",
+            appId: "1:1071484950223:web:a0d166e7069b4e5a1d09ba"
+        };
+
+        // 初始化 Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         let totalPoints = 0;
         let history = [];
         let redeemHistory = [];
-        let rewards = [];
-        let reasons = [];
+        let rewards = {};
+        let reasons = {};
 
-        function loadData() {
-            const saved = localStorage.getItem('yukiPoints');
-            if (saved) {
-                const data = JSON.parse(saved);
-                totalPoints = data.points || 0;
-                history = data.history || [];
-                redeemHistory = data.redeemed || [];
-            }
+        function init() {
             loadRewards();
             loadReasons();
+            loadPointsData();
         }
 
         function loadRewards() {
-            const saved = localStorage.getItem('yukiRewards');
-            if (saved) {
-                rewards = JSON.parse(saved);
-            } else {
-                rewards = [
-                    { id: 1, name: '小玩具', cost: 10, emoji: '🎁' },
-                    { id: 2, name: '冰淇淋', cost: 15, emoji: '🍦' },
-                    { id: 3, name: '漫畫書', cost: 20, emoji: '📚' },
-                    { id: 4, name: '去公園', cost: 25, emoji: '🎡' },
-                    { id: 5, name: '看電影', cost: 30, emoji: '🎬' },
-                    { id: 6, name: 'Switch 遊戲', cost: 50, emoji: '🎮' },
-                    { id: 7, name: '去餐廳吃飯', cost: 40, emoji: '🍕' },
-                    { id: 8, name: '新衣服', cost: 60, emoji: '👕' },
-                ];
-            }
-            updateDisplay();
+            db.ref('yukiRewards').on('value', snapshot => {
+                rewards = snapshot.val() || {};
+                updateDisplay();
+            });
         }
 
         function loadReasons() {
-            const saved = localStorage.getItem('yukiReasons');
-            if (saved) {
-                reasons = JSON.parse(saved);
-            } else {
-                reasons = [
-                    { id: 1, name: '完成家務', type: 'positive' },
-                    { id: 2, name: '守紀律', type: 'positive' },
-                    { id: 3, name: '幫助他人', type: 'positive' },
-                    { id: 4, name: '不聽話', type: 'negative' },
-                    { id: 5, name: '說謊', type: 'negative' },
-                ];
-            }
-            updateReasonSelect();
-            updateDisplay();
+            db.ref('yukiReasons').on('value', snapshot => {
+                reasons = snapshot.val() || {};
+                updateReasonSelect();
+            });
+        }
+
+        function loadPointsData() {
+            db.ref('yukiPoints').on('value', snapshot => {
+                const data = snapshot.val() || {};
+                totalPoints = data.points || 0;
+                history = Object.values(data.history || {});
+                redeemHistory = Object.values(data.redeemed || {});
+                updateDisplay();
+            });
         }
 
         function updateReasonSelect() {
             const select = document.getElementById('reasonSelect');
             select.innerHTML = '<option value="">--請選擇--</option>';
-            reasons.forEach(reason => {
-                select.innerHTML += `<option value="${reason.id}">${reason.name}</option>`;
+            Object.values(reasons).forEach(reason => {
+                select.innerHTML += `<option value="${reason.name}">${reason.name}</option>`;
             });
             select.innerHTML += '<option value="other">其他</option>';
-        }
-
-        function saveData() {
-            localStorage.setItem('yukiPoints', JSON.stringify({
-                points: totalPoints,
-                history: history,
-                redeemed: redeemHistory
-            }));
         }
 
         function addPoints() {
@@ -635,32 +619,19 @@
             const reasonSelect = document.getElementById('reasonSelect').value;
             const note = document.getElementById('noteInput').value.trim();
             const evaluator = document.getElementById('evaluatorInput').value;
-            let reason = '';
 
-            if (isNaN(points)) {
-                showMessage('請輸入有效的數字', 'error');
+            if (isNaN(points) || !reasonSelect || !evaluator) {
+                showMessage('請填寫所有必填欄位', 'error');
                 return;
             }
 
-            if (!reasonSelect) {
-                showMessage('請選擇原因', 'error');
-                return;
-            }
-
+            let reason = reasonSelect;
             if (reasonSelect === 'other') {
                 reason = document.getElementById('otherReasonInput').value.trim();
                 if (!reason) {
                     showMessage('請輸入其他原因', 'error');
                     return;
                 }
-            } else {
-                const selectedReason = reasons.find(r => r.id === parseInt(reasonSelect));
-                reason = selectedReason ? selectedReason.name : '';
-            }
-
-            if (!evaluator) {
-                showMessage('請選擇加減點的人', 'error');
-                return;
             }
 
             let finalEvaluator = evaluator;
@@ -672,21 +643,48 @@
                 }
             }
 
-            totalPoints += points;
-            history.unshift({
+            const pointData = {
                 points: points,
                 reason: reason,
                 note: note || null,
                 evaluator: finalEvaluator,
                 date: new Date().toLocaleString('zh-Hant-TW')
+            };
+
+            db.ref('yukiPoints').transaction(current => {
+                const data = current || { points: 0, history: {}, redeemed: {} };
+                data.points = (data.points || 0) + points;
+                const historyKey = db.ref('yukiPoints/history').push().key;
+                data.history = data.history || {};
+                data.history[historyKey] = pointData;
+                return data;
+            }).then(() => {
+                clearForm();
+                showMessage(`成功！已${points > 0 ? '加' : '扣'}${Math.abs(points)}點`, 'success');
             });
+        }
 
-            if (history.length > 50) history.pop();
+        function redeemReward(rewardId) {
+            const reward = Object.values(rewards).find(r => r.cost);
+            if (totalPoints < reward.cost) {
+                showMessage(`點數不足！還差 ${reward.cost - totalPoints} 點`, 'error');
+                return;
+            }
 
-            saveData();
-            updateDisplay();
-            clearForm();
-            showMessage(`成功！已${points > 0 ? '加' : '扣'}${Math.abs(points)}點`, 'success');
+            db.ref('yukiPoints').transaction(current => {
+                const data = current || { points: 0, history: {}, redeemed: {} };
+                data.points = (data.points || 0) - reward.cost;
+                const redeemedKey = db.ref('yukiPoints/redeemed').push().key;
+                data.redeemed = data.redeemed || {};
+                data.redeemed[redeemedKey] = {
+                    name: reward.name,
+                    cost: reward.cost,
+                    date: new Date().toLocaleString('zh-Hant-TW')
+                };
+                return data;
+            }).then(() => {
+                showMessage(`恭喜！已兌換「${reward.name}」`, 'success');
+            });
         }
 
         function showMessage(text, type) {
@@ -709,85 +707,33 @@
             document.getElementById('otherEvaluatorGroup').classList.add('hidden-input');
         }
 
-        function redeemReward(rewardId) {
-            const reward = rewards.find(r => r.id === rewardId);
-            if (totalPoints < reward.cost) {
-                showMessage(`點數不足！還差 ${reward.cost - totalPoints} 點`, 'error');
-                return;
-            }
-
-            totalPoints -= reward.cost;
-            redeemHistory.unshift({
-                id: reward.id,
-                name: reward.name,
-                emoji: reward.emoji,
-                cost: reward.cost,
-                date: new Date().toLocaleString('zh-Hant-TW')
-            });
-
-            saveData();
-            updateDisplay();
-            showMessage(`恭喜！已兌換「${reward.name}」`, 'success');
-        }
-
-        function calculateStats() {
-            const reasonCount = {};
-            history.forEach(item => {
-                if (item.points > 0) {
-                    reasonCount[item.reason] = (reasonCount[item.reason] || 0) + 1;
-                }
-            });
-            const topReason = Object.entries(reasonCount).sort((a, b) => b[1] - a[1])[0];
-
-            const badReasonCount = {};
-            history.forEach(item => {
-                if (item.points < 0) {
-                    badReasonCount[item.reason] = (badReasonCount[item.reason] || 0) + 1;
-                }
-            });
-            const topBadReason = Object.entries(badReasonCount).sort((a, b) => b[1] - a[1])[0];
-
-            const redeemCount = redeemHistory.length;
-            const totalSpent = redeemHistory.reduce((sum, item) => sum + item.cost, 0);
-
-            return {
-                topReason: topReason ? topReason[0] : '---',
-                topReasonCount: topReason ? topReason[1] : 0,
-                topBadReason: topBadReason ? topBadReason[0] : '---',
-                topBadReasonCount: topBadReason ? topBadReason[1] : 0,
-                redeemCount: redeemCount,
-                totalSpent: totalSpent
-            };
-        }
-
         function updateDisplay() {
             document.getElementById('totalPoints').textContent = totalPoints;
 
+            // 更新獎品列表
             const rewardsList = document.getElementById('rewardsList');
-            if (rewards.length === 0) {
-                rewardsList.innerHTML = '<div class="empty-message" style="grid-column: 1/-1;">還沒有可用的獎品</div>';
+            const rewardArray = Object.values(rewards);
+            if (rewardArray.length === 0) {
+                rewardsList.innerHTML = '<div class="empty-message" style="grid-column: 1/-1;">載入中...</div>';
             } else {
-                rewardsList.innerHTML = rewards.map(reward => `
+                rewardsList.innerHTML = rewardArray.map((reward, idx) => `
                     <div class="reward-card">
-                        ${reward.image ? 
-                            `<img src="${reward.image}" class="reward-image" alt="${reward.name}">` :
-                            `<div class="reward-emoji-fallback">${reward.emoji}</div>`
-                        }
+                        <div class="reward-emoji">${reward.emoji}</div>
                         <div class="reward-name">${reward.name}</div>
                         <div class="reward-cost">${reward.cost} 點</div>
-                        ${reward.link ? `<div style="font-size: 11px; margin: 0.5rem 0;"><a href="${reward.link}" target="_blank" style="color: #d73d8c;">🔗 詳情</a></div>` : ''}
-                        <button class="reward-button" onclick="redeemReward(${reward.id})" ${totalPoints < reward.cost ? 'disabled' : ''}>
+                        <button class="reward-button" onclick="redeemReward(${idx})" ${totalPoints < reward.cost ? 'disabled' : ''}>
                             兌換
                         </button>
                     </div>
                 `).join('');
             }
 
+            // 更新歷史記錄
             const historyList = document.getElementById('historyList');
             if (history.length === 0) {
                 historyList.innerHTML = '<div class="empty-message">還沒有記錄</div>';
             } else {
-                historyList.innerHTML = history.slice(0, 15).map(item => `
+                historyList.innerHTML = history.slice(-15).reverse().map(item => `
                     <div class="history-item ${item.points < 0 ? 'negative' : ''}">
                         <div class="history-points ${item.points > 0 ? 'positive' : 'negative'}">
                             ${item.points > 0 ? '➕' : '➖'} ${Math.abs(item.points)} 點
@@ -799,13 +745,14 @@
                 `).join('');
             }
 
+            // 更新已兌換獎品
             const redeemList = document.getElementById('redeemList');
             if (redeemHistory.length === 0) {
                 redeemList.innerHTML = '<div class="empty-message">還沒有兌換過獎品</div>';
             } else {
-                redeemList.innerHTML = redeemHistory.slice(0, 15).map(item => `
+                redeemList.innerHTML = redeemHistory.slice(-15).reverse().map(item => `
                     <div class="redeemed-item">
-                        <div class="redeemed-emoji">${item.emoji}</div>
+                        <div class="redeemed-emoji">🎁</div>
                         <div class="redeemed-info">
                             <div class="redeemed-name">${item.name}</div>
                             <div class="redeemed-date">用了 ${item.cost} 點 | ${item.date}</div>
@@ -814,45 +761,7 @@
                 `).join('');
             }
 
-            const stats = calculateStats();
-            const statsContent = document.getElementById('statsContent');
-            statsContent.innerHTML = `
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-label">📝 加分次數</div>
-                        <div class="stat-value">${history.filter(h => h.points > 0).length}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">⚠️ 扣分次數</div>
-                        <div class="stat-value">${history.filter(h => h.points < 0).length}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">🏆 已兌換獎品</div>
-                        <div class="stat-value">${stats.redeemCount}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">💰 花費點數</div>
-                        <div class="stat-value">${stats.totalSpent}</div>
-                    </div>
-                </div>
-                <div class="stats-detail">
-                    <div class="stats-detail-item">
-                        <span class="stats-detail-label">🌟 最常加分原因：</span>
-                        <span class="stats-detail-value">${stats.topReason}</span>
-                    </div>
-                    <div class="stats-detail-item" style="font-size: 14px; opacity: 0.8;">
-                        (出現 ${stats.topReasonCount} 次)
-                    </div>
-                    <div class="stats-detail-item">
-                        <span class="stats-detail-label">❌ 最常扣分原因：</span>
-                        <span class="stats-detail-value">${stats.topBadReason}</span>
-                    </div>
-                    <div class="stats-detail-item" style="font-size: 14px; opacity: 0.8;">
-                        (出現 ${stats.topBadReasonCount} 次)
-                    </div>
-                </div>
-            `;
-
+            // 更新統計
             const topStatsContainer = document.getElementById('topStatsContainer');
             topStatsContainer.innerHTML = `
                 <div class="stat-item">
@@ -866,9 +775,9 @@
             `;
         }
 
-        // 監聽原因選擇
+        // 監聽選擇
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('reasonSelect')?.addEventListener('change', function() {
+            document.getElementById('reasonSelect').addEventListener('change', function() {
                 const otherGroup = document.getElementById('otherReasonGroup');
                 if (this.value === 'other') {
                     otherGroup.classList.remove('hidden-input');
@@ -877,7 +786,7 @@
                 }
             });
 
-            document.getElementById('evaluatorInput')?.addEventListener('change', function() {
+            document.getElementById('evaluatorInput').addEventListener('change', function() {
                 const otherGroup = document.getElementById('otherEvaluatorGroup');
                 if (this.value === '其他') {
                     otherGroup.classList.remove('hidden-input');
@@ -886,7 +795,7 @@
                 }
             });
 
-            loadData();
+            init();
         });
     </script>
 </body>
